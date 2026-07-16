@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aleena KS — MERN Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-primary:#0A0E14;
+    --bg-surface:#121924;
+    --bg-surface-2:#1A2330;
+    --text-primary:#E7EBF0;
+    --text-muted:#8B95A5;
+    --text-dim:#5C6675;
+    --accent-teal:#4FD8C4;
+    --accent-teal-dim:rgba(79,216,196,0.12);
+    --accent-amber:#F2A65A;
+    --accent-amber-dim:rgba(242,166,90,0.12);
+    --border:rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.14);
+    --font-display:'Space Grotesk',sans-serif;
+    --font-body:'Inter',sans-serif;
+    --font-mono:'JetBrains Mono',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-primary);
+    color:var(--text-primary);
+    font-family:var(--font-body);
+    line-height:1.6;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);
+    background-size:28px 28px;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--accent-teal);color:#06110F;}
+  :focus-visible{outline:2px solid var(--accent-teal);outline-offset:3px;}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
+
+  /* NAV */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    backdrop-filter:blur(12px);
+    background:rgba(10,14,20,0.75);
+    border-bottom:1px solid var(--border);
+  }
+  nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;max-width:1120px;margin:0 auto;}
+  .logo{font-family:var(--font-mono);font-weight:600;font-size:1rem;letter-spacing:0.02em;}
+  .logo span{color:var(--accent-teal);}
+  .nav-links{display:flex;gap:36px;list-style:none;font-size:0.92rem;color:var(--text-muted);}
+  .nav-links a{transition:color 0.2s;position:relative;}
+  .nav-links a:hover{color:var(--text-primary);}
+  .nav-cta{
+    font-family:var(--font-mono);font-size:0.82rem;
+    border:1px solid var(--border-strong);padding:8px 16px;border-radius:6px;
+    color:var(--text-primary);transition:all 0.2s;
+  }
+  .nav-cta:hover{border-color:var(--accent-teal);color:var(--accent-teal);}
+  .menu-btn{display:none;background:none;border:none;color:var(--text-primary);font-size:1.4rem;cursor:pointer;}
+
+  /* HERO */
+  .hero{
+    min-height:100vh;display:flex;align-items:center;
+    padding:140px 0 80px;
+  }
+  .hero-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;align-items:center;}
+  .eyebrow{
+    font-family:var(--font-mono);font-size:0.82rem;color:var(--accent-amber);
+    letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent-amber);box-shadow:0 0 0 4px var(--accent-amber-dim);}
+  h1{
+    font-family:var(--font-display);font-size:clamp(2.4rem,5vw,4rem);font-weight:700;
+    line-height:1.05;letter-spacing:-0.02em;margin-bottom:22px;
+  }
+  h1 .accent{color:var(--accent-teal);}
+  .hero p.lede{font-size:1.1rem;color:var(--text-muted);max-width:480px;margin-bottom:34px;}
+  .btn-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:38px;}
+  .btn{
+    font-family:var(--font-body);font-weight:600;font-size:0.94rem;
+    padding:13px 26px;border-radius:8px;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn-primary{background:var(--accent-teal);color:#06110F;}
+  .btn-primary:hover{background:#6be5d3;transform:translateY(-1px);}
+  .btn-ghost{border:1px solid var(--border-strong);color:var(--text-primary);}
+  .btn-ghost:hover{border-color:var(--accent-amber);color:var(--accent-amber);}
+  .social-row{display:flex;gap:22px;font-family:var(--font-mono);font-size:0.85rem;color:var(--text-muted);}
+  .social-row a{display:flex;align-items:center;gap:7px;transition:color 0.2s;}
+  .social-row a:hover{color:var(--accent-teal);}
+
+  /* terminal card */
+  .terminal{
+    background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;
+    overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+  .terminal-bar{
+    display:flex;align-items:center;gap:8px;padding:12px 16px;
+    background:var(--bg-surface-2);border-bottom:1px solid var(--border);
+  }
+  .dot{width:11px;height:11px;border-radius:50%;}
+  .dot.r{background:#ff5f56;} .dot.y{background:#ffbd2e;} .dot.g{background:#27c93f;}
+  .terminal-title{margin-left:8px;font-family:var(--font-mono);font-size:0.78rem;color:var(--text-dim);}
+  .terminal-body{padding:24px;font-family:var(--font-mono);font-size:0.88rem;color:var(--text-muted);min-height:230px;}
+  .terminal-body .key{color:#C792EA;}
+  .terminal-body .str{color:var(--accent-teal);}
+  .terminal-body .prop{color:#8FBCFF;}
+  .cursor{display:inline-block;width:7px;height:15px;background:var(--accent-teal);vertical-align:middle;animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* SECTION shared */
+  section{padding:100px 0;border-top:1px solid var(--border);}
+  .section-head{margin-bottom:52px;}
+  .section-num{font-family:var(--font-mono);color:var(--accent-amber);font-size:0.85rem;margin-bottom:10px;}
+  h2{font-family:var(--font-display);font-size:clamp(1.7rem,3vw,2.3rem);font-weight:600;letter-spacing:-0.01em;}
+  .section-sub{color:var(--text-muted);margin-top:10px;max-width:560px;}
+
+  /* ABOUT */
+  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:60px;}
+  .about-grid p{color:var(--text-muted);margin-bottom:16px;font-size:1.02rem;}
+  .fact-list{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--border);}
+  .fact{display:flex;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border);font-size:0.92rem;}
+  .fact-label{font-family:var(--font-mono);color:var(--text-dim);}
+  .fact-value{color:var(--text-primary);text-align:right;}
+
+  /* EXPERIENCE */
+  .timeline{display:flex;flex-direction:column;}
+  .tl-item{
+    display:grid;grid-template-columns:190px 1fr;gap:32px;padding:32px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .tl-item:first-child{padding-top:0;}
+  .tl-date{font-family:var(--font-mono);font-size:0.85rem;color:var(--accent-teal);}
+  .tl-role{font-family:var(--font-display);font-size:1.2rem;font-weight:600;margin-bottom:4px;}
+  .tl-org{color:var(--text-muted);font-size:0.92rem;margin-bottom:14px;}
+  .tl-org span{color:var(--text-dim);}
+  .tl-item ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .tl-item li{color:var(--text-muted);font-size:0.94rem;padding-left:18px;position:relative;}
+  .tl-item li::before{content:'—';position:absolute;left:0;color:var(--text-dim);}
+
+  /* PROJECTS */
+  .project-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .project-card{
+    background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;
+    padding:28px;display:flex;flex-direction:column;transition:border-color 0.25s,transform 0.25s;
+  }
+  .project-card:hover{border-color:var(--accent-teal);transform:translateY(-4px);}
+  .project-index{font-family:var(--font-mono);font-size:0.8rem;color:var(--text-dim);margin-bottom:18px;}
+  .project-card h3{font-family:var(--font-display);font-size:1.18rem;font-weight:600;margin-bottom:12px;}
+  .project-card ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;flex-grow:1;}
+  .project-card li{color:var(--text-muted);font-size:0.88rem;padding-left:16px;position:relative;}
+  .project-card li::before{content:'▸';position:absolute;left:0;color:var(--accent-amber);font-size:0.75rem;top:3px;}
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+  .tag{font-family:var(--font-mono);font-size:0.72rem;padding:4px 10px;border-radius:20px;background:var(--accent-teal-dim);color:var(--accent-teal);}
+  .project-link{font-family:var(--font-mono);font-size:0.85rem;color:var(--text-primary);display:flex;align-items:center;gap:6px;border-top:1px solid var(--border);padding-top:16px;transition:color 0.2s;}
+  .project-link:hover{color:var(--accent-teal);}
+
+  /* SKILLS */
+  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .skill-group{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:26px;}
+  .skill-group-title{font-family:var(--font-mono);font-size:0.8rem;color:var(--accent-amber);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{font-size:0.85rem;padding:7px 13px;border-radius:7px;background:var(--bg-surface-2);border:1px solid var(--border);color:var(--text-primary);}
+
+  /* EDUCATION */
+  .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .edu-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:28px;}
+  .edu-card .tl-date{margin-bottom:8px;display:block;}
+  .edu-card h3{font-family:var(--font-display);font-size:1.1rem;font-weight:600;margin-bottom:6px;}
+  .edu-card p{color:var(--text-muted);font-size:0.92rem;}
+
+  /* CONTACT */
+  .contact-box{
+    background:linear-gradient(145deg,var(--bg-surface),var(--bg-surface-2));
+    border:1px solid var(--border);border-radius:16px;padding:60px;text-align:center;
+  }
+  .contact-box h2{margin-bottom:14px;}
+  .contact-box p{color:var(--text-muted);max-width:460px;margin:0 auto 32px;}
+  .contact-links{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;}
+
+  footer{padding:32px 0;text-align:center;color:var(--text-dim);font-family:var(--font-mono);font-size:0.82rem;border-top:1px solid var(--border);}
+
+  @media (max-width:860px){
+    .nav-links,.nav-cta{display:none;}
+    .menu-btn{display:block;}
+    .hero-grid{grid-template-columns:1fr;}
+    .terminal{order:-1;}
+    .about-grid{grid-template-columns:1fr;}
+    .project-grid{grid-template-columns:1fr;}
+    .skills-grid{grid-template-columns:1fr;}
+    .edu-grid{grid-template-columns:1fr;}
+    .tl-item{grid-template-columns:1fr;gap:8px;}
+    .contact-box{padding:40px 24px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#" class="logo">Aleena<span>.</span>KS</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Education</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Get in touch</a>
+    <button class="menu-btn" aria-label="Menu">☰</button>
+  </nav>
+</header>
+
+<main>
+    <section class="hero" style="border-top:none;padding-top:140px;">
+        <div class="wrap">
+          <div style="max-width:760px;margin:0 auto;text-align:center;">
+      
+            <div class="eyebrow" style="justify-content:center;">Open to work</div>
+      
+            <h1>
+              Hi, I'm <span class="accent">Aleena KS</span>
+            </h1>
+      
+            <h2 style="
+              font-size:1.5rem;
+              font-weight:500;
+              color:var(--text-muted);
+              margin:15px 0 25px;
+            ">
+              Web Developer
+            </h2>
+      
+            <p class="lede" style="margin:0 auto 40px;max-width:650px;">
+              I'm a web developer from Thrissur, Kerala who builds responsive,
+              user-friendly web applications using MongoDB, Express.js, React and
+              Node.js.
+            </p>
+      
+            <div class="btn-row" style="justify-content:center;">
+              <a href="#projects" class="btn btn-primary">
+                View Projects →
+              </a>
+      
+              <a href="./Resume-Aleena KS-MERN-1.pdf"
+                 class="btn btn-ghost"
+                 download>
+                Download Résumé
+              </a>
+            </div>
+      
+            <div class="social-row" style="justify-content:center;margin-top:30px;">
+              <a href="https://linkedin.com/in/aleena-ks" target="_blank">
+                LinkedIn
+              </a>
+      
+              <a href="mailto:aleenaks003@gmail.com">
+                Email
+              </a>
+      
+              <a href="tel:+917970727588">
+                +91 7970 27588
+              </a>
+            </div>
+      
+          </div>
+        </div>
+      </section>
+
+  <section id="about">
+    <div class="wrap about-grid">
+      <div>
+        <div class="section-head">
+          <div class="section-num">01 · About</div>
+          <h2>Profile Summary</h2>
+        </div>
+        <p>Aspiring web developer with MERN stack training and hands-on experience building responsive full-stack applications. Skilled in HTML, CSS, JavaScript, React, Node.js, and MongoDB through real project.</p>
+        <p>Eager to apply problem-solving skills and contribute to innovative web development projects.</p>
+      </div>
+      <div class="fact-list">
+        <div class="fact"><span class="fact-label">LOCATION</span><span class="fact-value">Thrissur, Kerala, INDIA</span></div>
+        <div class="fact"><span class="fact-label">ROLE</span><span class="fact-value">MERN Stack Developer</span></div>
+        <div class="fact"><span class="fact-label">EDUCATION</span><span class="fact-value">Bachelor of Computer Applications </span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-num">02 · Experience</div>
+        <h2>Work Experience</h2>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">Jun 2025 — Jan 2026</div>
+          <div>
+            <div class="tl-role">MERN Development Trainee</div>
+            <div class="tl-org">Luminar Technolab <span>· Kakkanad</span></div>
+            <ul>
+              <li>Developed responsive full-stack applications using MERN stack technologies.</li>
+              <li>Built reusable React components and REST APIs with Node.js and Express.js.</li>
+              <li>Worked with MongoDB for database management and data handling.</li>
+              <li>Collaborated on real-time projects to sharpen problem-solving and development skills.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Apr 2025 — May 2025</div>
+          <div>
+            <div class="tl-role">Web Development Intern</div>
+            <div class="tl-org">CD Business Solutions</div>
+            <ul>
+              <li>Worked on website management and development tasks.</li>
+              <li>Updated and maintained web pages based on client requirements.</li>
+              <li>Collaborated with team members to fix issues and improve site functionality.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-num">03 · Projects</div>
+        <h2>Selected Work</h2>
+      </div>
+  
+      <div class="project-grid">
+  
+        <div class="project-card">
+          <div class="project-index">01</div>
+          <h3>Gym Management System</h3>
+          <ul>
+            <li>Full-stack platform to manage members, trainers, and admin operations.</li>
+            <li>Membership management, attendance tracking, and personalized plans.</li>
+            <li>Stripe payment gateway for secure online payments.</li>
+            <li>jsPDF-powered PDF generation for diet and workout plans.</li>
+          </ul>
+  
+          <div class="tag-row">
+            <span class="tag">React</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">Express</span>
+            <span class="tag">MongoDB</span>
+            <span class="tag">Stripe</span>
+          </div>
+  
+          <a href="https://github.com/Aleena994-ux/Gym-Management-frontend.git"
+             target="_blank"
+             rel="noopener"
+             class="project-link">
+            View code on GitHub →
+          </a>
+        </div>
+  
+        <div class="project-card">
+          <div class="project-index">02</div>
+          <h3>Online Book Store</h3>
+  
+          <ul>
+            <li>Full-stack MERN app for buying and selling books.</li>
+            <li>Category-based search and filtering for easy discovery.</li>
+            <li>Separate user and admin roles for managing books and orders.</li>
+            <li>Stripe integration and MongoDB schema design for orders.</li>
+          </ul>
+  
+          <div class="tag-row">
+            <span class="tag">React</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">Express</span>
+            <span class="tag">MongoDB</span>
+            <span class="tag">Stripe</span>
+          </div>
+  
+          <a href="https://github.com/Aleena994-ux/BookStore-frontend.git"
+             target="_blank"
+             rel="noopener"
+             class="project-link">
+            View code on GitHub →
+          </a>
+        </div>
+  
+        <div class="project-card">
+          <div class="project-index">03</div>
+          <h3>Blog Web App</h3>
+  
+          <ul>
+            <li>React application with full CRUD functionality for posts.</li>
+            <li>Category-based filtering to display posts dynamically.</li>
+            <li>React state management driving real-time UI updates.</li>
+          </ul>
+  
+          <div class="tag-row">
+            <span class="tag">React</span>
+            <span class="tag">CRUD</span>
+            <span class="tag">State Mgmt</span>
+          </div>
+  
+          <a href="https://github.com/Aleena994-ux/Blogweb.git"
+             target="_blank"
+             rel="noopener"
+             class="project-link">
+            View code on GitHub →
+          </a>
+        </div>
+  
+        <!-- NEW PROJECT -->
+  
+        <div class="project-card">
+          <div class="project-index">04</div>
+  
+          <h3>La-Pizza Restaurant Website</h3>
+  
+          <ul>
+            <li>Developed a modern and fully responsive restaurant website using Bootstrap 5.</li>
+            <li>Designed interactive sections including Hero, About, Menu, Best Sellers, Combos and Contact.</li>
+            <li>Implemented responsive layouts, smooth scrolling and AOS animations for enhanced user experience.</li>
+            <li>Integrated Google Maps and optimized the website for desktop, tablet and mobile devices.</li>
+          </ul>
+  
+          <div class="tag-row">
+            <span class="tag">HTML5</span>
+            <span class="tag">CSS3</span>
+            <span class="tag">Bootstrap 5</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">AOS</span>
+          </div>
+  
+          <a href="https://github.com/Aleena994-ux/restaurantweb.git"
+             target="_blank"
+             rel="noopener"
+             class="project-link">
+            View code on GitHub →
+          </a>
+        </div>
+  
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-num">04 · Skills</div>
+        <h2>Tools &amp; Technologies</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <div class="skill-group-title">Frontend</div>
+          <div class="chip-row">
+            <span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">Bootstrap</span><span class="chip">Tailwind CSS</span><span class="chip">JavaScript (ES6+)</span><span class="chip">React</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">Backend &amp; Database</div>
+          <div class="chip-row">
+            <span class="chip">Node.js</span><span class="chip">Express.js</span><span class="chip">MongoDB</span><span class="chip">REST APIs</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">Tools</div>
+          <div class="chip-row">
+            <span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">VS Code</span><span class="chip">Figma</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-num">05 · Education</div>
+        <h2>Education &amp; Certifications</h2>
+      </div>
+      <div class="edu-grid">
+        <div class="edu-card">
+          <span class="tl-date">Bachelor's Degree</span>
+          <h3>Bachelor of Computer Applications (BCA)</h3>
+          <p>MES T O Abdulla Memorial College, Kunnukara</p>
+        </div>
+        <div class="edu-card">
+          <span class="tl-date">Certification</span>
+          <h3>JavaScript — 5-Day Workshop</h3>
+          <p>Code Easy Academy</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact-box">
+        <div class="section-num" style="justify-content:center;display:flex;">06 · Contact</div>
+        <h2>Let's build something together.</h2>
+        <p>I'm currently open to new opportunities as a MERN stack developer. Reach out and I'll get back to you soon.</p>
+        <div class="contact-links">
+          <a href="mailto:aleenaks003@gmail.com" class="btn btn-primary">Email Me</a>
+          <a href="https://linkedin.com/in/aleena-ks" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">  © 2026 Aleena KS. All Rights Reserved.</div>
+</footer>
+
+<script>
+  // Mobile menu toggle
+  document.querySelector('.menu-btn').addEventListener('click', () => {
+    const links = document.querySelector('.nav-links');
+    const cta = document.querySelector('.nav-cta');
+    const shown = links.style.display === 'flex';
+    links.style.display = shown ? 'none' : 'flex';
+    cta.style.display = shown ? 'none' : 'inline-flex';
+    if(!shown){
+      links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:64px;right:32px;background:#121924;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:20px 24px;gap:16px;';
+      cta.style.cssText = 'display:inline-flex;position:absolute;top:190px;right:32px;';
+    }
+  });
+
+  // Typing terminal effect
+  const lines = [
+    ['const ', 'key'], ['developer', ''], [' = {', ''],
+  ];
+  const target = document.getElementById('typedTerminal');
+  const codeHTML =
+`<span class="key">const</span> developer = {
+  <span class="prop">name</span>: <span class="str">"Aleena KS"</span>,
+  <span class="prop">role</span>: <span class="str">"MERN Stack Developer"</span>,
+  <span class="prop">stack</span>: [<span class="str">"React"</span>, <span class="str">"Node.js"</span>, <span class="str">"Express"</span>, <span class="str">"MongoDB"</span>],
+  <span class="prop">basedIn</span>: <span class="str">"Thrissur, Kerala"</span>,
+  <span class="prop">status</span>: <span class="str">"open to work"</span>
+};`;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if(prefersReducedMotion){
+    target.innerHTML = codeHTML;
+  } else {
+    // Type out plain text first for a clean effect, then swap to highlighted HTML
+    const plain = `const developer = {
+  name: "Aleena KS",
+  role: "MERN Stack Developer",
+  stack: ["React", "Node.js", "Express", "MongoDB"],
+  basedIn: "Thrissur, Kerala",
+  status: "open to work"
+};`;
+    let i = 0;
+    target.innerHTML = '<span class="cursor"></span>';
+    const speed = 14;
+    function type(){
+      if(i <= plain.length){
+        const shown = plain.slice(0, i).replace(/\\n/g,'<br>').replace(/ /g,'&nbsp;');
+        target.innerHTML = shown + '<span class="cursor"></span>';
+        i++;
+        requestAnimationFrame(()=> setTimeout(type, speed));
+      } else {
+        target.innerHTML = codeHTML;
+      }
+    }
+    type();
+  }
+</script>
+
+</body>
+</html>
